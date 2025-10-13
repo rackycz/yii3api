@@ -31,6 +31,7 @@
     "require": {
         "php": "^8.2",
         "ext-filter": "*",
+        "fakerphp/faker": "^1.24",
         "httpsoft/http-message": "^1.1.6",
         "psr/container": "^2.0.2",
         "psr/http-factory": "^1.1",
@@ -60,6 +61,7 @@
         "yiisoft/request-provider": "^1.2",
         "yiisoft/router": "^4.0.1",
         "yiisoft/router-fastroute": "^4.0.2",
+        "yiisoft/security": "^1.1",
         "yiisoft/validator": "^2.5",
         "yiisoft/yii-console": "^2.4",
         "yiisoft/yii-http": "^1.1.0",
