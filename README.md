@@ -68,22 +68,38 @@ If you make any changes in your docker setup, just call following commands to re
 Why did I change the web port?
 Because later you may run 4 different projects at the same time and all cannot run on port 80.
 
-## MariaDB + migrations 
+## MariaDB + migrations
 
 These composer packages were added using the "make" command:
 
-- yiisoft/db-migration
-- yiisoft/db-mysql
-- yiisoft/cache
+- [yiisoft/db-migration](https://github.com/yiisoft/db-migration)
+- [yiisoft/db-mysql](https://github.com/yiisoft/db-mysql)
+- [yiisoft/cache](https://github.com/yiisoft/cache)
 
-Now you can call `make yii list` and you will see migration commands. 
+Now you can call `make yii list` and you will see migration commands.
 When creating a new migration, the best way is:
+
 - `make yii "migrate:create user --command=table"`
 - Do not forget about the quotes, otherwise "make" will understand it incorrectly
 
 > Note:
-> Compared to Yii2, migration names are not nice (example `M251013085231CreateUserTable.php`). They are created using method generateClassName() in 
-> `vendor/yiisoft/db-migration/src/Service/MigrationService.php`.
+> Compared to Yii2, migration names are not nice (example `M251013085231CreateUserTable.php`). They are created using
+> method generateClassName() in `vendor/yiisoft/db-migration/src/Service/MigrationService.php`.
 
 The DB connection is defined in file [docker/.env](docker/.env) and is pushed into containers so it can be reused.
 I feel the connection should be defined in the dev-related .env file, but it didn't work for me. I will investigate.
+
+Note:
+If I restart the containers using make down, build + up, then the command "make yii migrate:up"
+sometimes cannot connect to the DB. Additional restart helped. I will have to test again.
+
+## Seeding
+
+For seeding the DB, I used these packages:
+
+- [fakerphp/faker](https://github.com/FakerPHP/Faker)
+- [yiisoft/security](https://github.com/yiisoft/security)
+
+Check `src/Console/SeedCommand.php` + `config/console/commands.php`.
+
+Seeding is executed by command `make yii seed`. List of all available commands is here: `make yii list`.
