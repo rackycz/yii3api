@@ -66,7 +66,7 @@ final class UserRepository extends BaseRepository
         $this->hydrateAttribute($model, 'deleted_by', $row['deleted_by']);
         $this->hydrateAttribute($model, 'created_at', new DateTimeImmutable($row['created_at']));
         $this->hydrateAttribute($model, 'updated_at', new DateTimeImmutable($row['updated_at'] ?? ''));
-        $this->hydrateAttribute($model, 'deleted_by', new DateTimeImmutable($row['deleted_by'] ?? ''));
+        $this->hydrateAttribute($model, 'deleted_at', new DateTimeImmutable($row['deleted_by'] ?? ''));
 
         return $model;
     }

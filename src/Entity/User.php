@@ -112,7 +112,7 @@ class User
 
     public function validatePassword(string $password): bool
     {
-        return (new PasswordHasher())->validate($password, $this->password_vuejs_hash);
+        return (new PasswordHasher())->validate($password, $this->pwd_hash);
     }
 
     public function getId(): ?int

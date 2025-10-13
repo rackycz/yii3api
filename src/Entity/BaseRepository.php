@@ -54,7 +54,7 @@ abstract class BaseRepository
         );
     }
 
-    public function findOne(string $attr, mixed $value): ?User
+    public function findOne(string $attr, mixed $value): ?object
     {
         try {
             $row = (new Query($this->db))
@@ -86,7 +86,7 @@ abstract class BaseRepository
         return true;
     }
 
-    protected function hydrateAttribute(\ReflectionClass $reflection, object $model, mixed $attribute, mixed $value)
+    protected function hydrateAttribute(object $model, mixed $attribute, mixed $value)
     {
         $reflection = new \ReflectionClass($model);
         $idProperty = $reflection->getProperty($attribute);

@@ -104,9 +104,21 @@ Check `src/Console/SeedCommand.php` + `config/console/commands.php`.
 
 Seeding is executed by command `make yii seed`. List of all available commands is here: `make yii list`.
 
-## Reading/writing data from/to DB 
+## Reading/writing data from/to DB
 
 In Yii we were always using ActiveRecord and its models, but in Yii3 the package is not ready yet.
-The (temporary) solution is to use the existing class `Yiisoft\Db\Query\Query` for reading - see [src/Entity/BaseRepository.php](src/Entity/BaseRepository.php).
+The (temporary) solution is to use the existing class `Yiisoft\Db\Query\Query` for reading -
+see [src/Entity/BaseRepository.php](src/Entity/BaseRepository.php).
 
 Writing is done in [src/Console/SeedCommand.php](src/Console/SeedCommand.php) using `Yiisoft\Db\Mysql\Command`.
+
+## API login + Access token
+
+Two endpoints were added:
+
+- src/Api/LoginAction.php
+- src/Api/BearerAction.php
+
+The former is used to create and return the access token. 
+The latter then tests if the token is in the request thanks to the middleware used in `config/common/routes.php`.
+To reach these functionalities, UserToken + its repository were added as well as the migration for storing the tokens.
