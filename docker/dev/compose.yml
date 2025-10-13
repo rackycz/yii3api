@@ -12,6 +12,11 @@ services:
       - path: ./dev/.env
       - path: ./dev/override.env
         required: false
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
     restart: unless-stopped
     depends_on:
       - db
@@ -29,9 +34,9 @@ services:
     container_name: yii3api_db
     environment:
       MARIADB_ROOT_PASSWORD: root
-      MARIADB_DATABASE: db
-      MARIADB_USER: db
-      MARIADB_PASSWORD: db
+      MARIADB_DATABASE: ${DB_DATABASE}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
 
   adminer:
     image: adminer:latest

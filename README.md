@@ -67,3 +67,23 @@ If you make any changes in your docker setup, just call following commands to re
 
 Why did I change the web port?
 Because later you may run 4 different projects at the same time and all cannot run on port 80.
+
+## MariaDB + migrations 
+
+These composer packages were added using the "make" command:
+
+- yiisoft/db-migration
+- yiisoft/db-mysql
+- yiisoft/cache
+
+Now you can call `make yii list` and you will see migration commands. 
+When creating a new migration, the best way is:
+- `make yii "migrate:create user --command=table"`
+- Do not forget about the quotes, otherwise "make" will understand it incorrectly
+
+> Note:
+> Compared to Yii2, migration names are not nice (example `M251013085231CreateUserTable.php`). They are created using method generateClassName() in 
+> `vendor/yiisoft/db-migration/src/Service/MigrationService.php`.
+
+The DB connection is defined in file [docker/.env](docker/.env) and is pushed into containers so it can be reused.
+I feel the connection should be defined in the dev-related .env file, but it didn't work for me. I will investigate.
