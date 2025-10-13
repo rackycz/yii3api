@@ -103,3 +103,10 @@ For seeding the DB, I used these packages:
 Check `src/Console/SeedCommand.php` + `config/console/commands.php`.
 
 Seeding is executed by command `make yii seed`. List of all available commands is here: `make yii list`.
+
+## Reading/writing data from/to DB 
+
+In Yii we were always using ActiveRecord and its models, but in Yii3 the package is not ready yet.
+The (temporary) solution is to use the existing class `Yiisoft\Db\Query\Query` for reading - see [src/Entity/BaseRepository.php](src/Entity/BaseRepository.php).
+
+Writing is done in [src/Console/SeedCommand.php](src/Console/SeedCommand.php) using `Yiisoft\Db\Mysql\Command`.

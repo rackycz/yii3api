@@ -12,7 +12,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Security\PasswordHasher;
-use Yiisoft\Security\Random;
 use Yiisoft\Yii\Console\ExitCode;
 
 #[AsCommand(
@@ -39,7 +38,10 @@ final class SeedCommand extends Command
         $db = $this->container->get(ConnectionInterface::class);
 
         for ($i = 0; $i < 10; $i++) {
-            $password = Random::string(8);
+            $password = strtoupper($faker->bothify('?#?#?#?#'));
+            // Other options for random strings:
+            // lexify(), numerify(), regexify()
+
             $db->createCommand()
                 ->insert('user', [
                     'name' => $faker->firstName(),
