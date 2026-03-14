@@ -29,7 +29,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "8.2 - 8.5",
         "ext-filter": "*",
         "fakerphp/faker": "^1.24.1",
         "httpsoft/http-message": "^1.1.6",
@@ -39,12 +39,12 @@
         "psr/http-server-handler": "^1.0.2",
         "psr/http-server-middleware": "^1.0.2",
         "psr/log": "^3.0.2",
-        "symfony/console": "^7.4.7",
+        "symfony/console": "^7.4.6 || ^8.0.6",
         "yiisoft/aliases": "^3.1.1",
-        "yiisoft/cache": "^3.2",
         "yiisoft/config": "^1.6.2",
+        "yiisoft/cache": "^3.2",
         "yiisoft/data": "^1.0.1",
-        "yiisoft/data-response": "^2.2.0",
+        "yiisoft/data-response": "^2.2",
         "yiisoft/db-migration": "^1.2",
         "yiisoft/db-mysql": "^1.2",
         "yiisoft/definitions": "^3.4.1",
@@ -72,7 +72,7 @@
         "codeception/c3": "^2.9",
         "codeception/codeception": "^5.3.5",
         "codeception/lib-innerbrowser": "^4.1.0",
-        "codeception/module-asserts": "^3.3",
+        "codeception/module-asserts": "^3.3.0",
         "codeception/module-cli": "^2.0.1",
         "codeception/module-db": "^3.2.2",
         "codeception/module-phpbrowser": "^3.0.2",
@@ -109,8 +109,8 @@
         "bump-after-update": true,
         "allow-plugins": {
             "codeception/c3": true,
-            "infection/extension-installer": true,
             "composer/package-versions-deprecated": true,
+            "infection/extension-installer": true,
             "yiisoft/config": true
         }
     }

@@ -119,6 +119,6 @@ Two endpoints were added:
 - src/Api/LoginAction.php
 - src/Api/BearerAction.php
 
-The former is used to create and return the access token. 
+The former is used to create and return the access token.
 The latter then tests if the token is in the request thanks to the middleware used in `config/common/routes.php`.
 To reach these functionalities, UserToken + its repository were added as well as the migration for storing the tokens.

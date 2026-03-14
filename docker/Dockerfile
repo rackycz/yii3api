@@ -20,6 +20,8 @@ RUN install-php-extensions \
     pdo \
     pdo_mysql
 
+ENV LC_ALL=C.UTF-8
+
 #
 # Development
 #
