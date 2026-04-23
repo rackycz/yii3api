@@ -32,7 +32,48 @@ endif
 
 ifeq ($(PRIMARY_GOAL),up)
 up: ## Up the dev environment.
-	$(DOCKER_COMPOSE_DEV) up -d --remove-orphans
+	@set -eu; \
+	if $(DOCKER_COMPOSE_DEV) up -d --wait --wait-timeout 60 --remove-orphans; then \
+		port="$$( $(DOCKER_COMPOSE_DEV) port app 80 )"; \
+		host_port="$${port##*:}"; \
+		url="http://localhost$$( [ "$$host_port" = '80' ] || printf ':%s' "$$host_port" )"; \
+		printf 'Started server at %s\n' "$$url"; \
+	else \
+		echo 'Failed to start server.' >&2; \
+		container_id="$$( $(DOCKER_COMPOSE_DEV) ps -a -q app 2>/dev/null || true )"; \
+		if [ -n "$$container_id" ]; then \
+			state="$$(docker inspect -f '{{.State.Status}}' "$$container_id" 2>/dev/null || true)"; \
+			health="$$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{end}}' "$$container_id" 2>/dev/null || true)"; \
+			exit_code="$$(docker inspect -f '{{.State.ExitCode}}' "$$container_id" 2>/dev/null || true)"; \
+			error="$$(docker inspect -f '{{.State.Error}}' "$$container_id" 2>/dev/null || true)"; \
+			if [ -n "$$error" ]; then \
+				exit 1; \
+			fi; \
+			[ -n "$$health" ] && echo "Container health: $$health" >&2; \
+			[ -n "$$state" ] && echo "Container state: $$state" >&2; \
+			[ -n "$$exit_code" ] && echo "Container exit code: $$exit_code" >&2; \
+			echo 'Recent logs:' >&2; \
+			$(DOCKER_COMPOSE_DEV) logs --tail=50 app >&2 || true; \
+		fi; \
+		exit 1; \
+	fi
+endif
+
+ifeq ($(PRIMARY_GOAL),open)
+open: ## Open the running app in the default browser.
+	@set -eu; \
+	if ! port="$$( $(DOCKER_COMPOSE_DEV) port app 80 2>/dev/null )" || [ -z "$$port" ]; then \
+		echo 'Start server with `make up` first.' >&2; \
+		exit 0; \
+	fi; \
+	host_port="$${port##*:}"; \
+	url="http://localhost$$( [ "$$host_port" = '80' ] || printf ':%s' "$$host_port" )"; \
+	opener="$$(command -v xdg-open || command -v open || command -v wslview || true)"; \
+	if [ -z "$$opener" ]; then \
+		echo "Could not open $$url." >&2; \
+		exit 0; \
+	fi; \
+	"$$opener" "$$url" >/dev/null 2>&1 &
 endif
 
 ifeq ($(PRIMARY_GOAL),down)
@@ -127,14 +168,14 @@ ifeq ($(PRIMARY_GOAL),prod-deploy)
 prod-deploy: ## Deploy to production.
 	@set -euo pipefail; \
 	docker -H ${PROD_SSH} stack deploy --prune --detach=false --with-registry-auth -c docker/compose.yml -c docker/prod/compose.yml ${STACK_NAME} 2>&1 | tee deploy.log; \
-	if grep -qiE 'rollback:|update rolled back' deploy.log; then \
+	if grep -qiE 'rollback:|update rolled back|service update paused' deploy.log; then \
 		FAILED_TASK_ID=$$(grep -oiE 'task[[:space:]]+[a-z0-9]+' deploy.log | head -n 1 | awk '{print $$2}'); \
 		if [ -n "$${FAILED_TASK_ID}" ]; then \
-			echo "Docker Swarm update rolled back; failing job. Failed task ID: $${FAILED_TASK_ID}"; \
+			echo "Docker Swarm update failed. Failed task ID: $${FAILED_TASK_ID}"; \
 			echo "--- docker service logs ($${FAILED_TASK_ID}) ---"; \
 			docker -H ${PROD_SSH} service logs --timestamps --tail 500 "$${FAILED_TASK_ID}" || true; \
 		else \
-			echo 'Docker Swarm update rolled back; failing job. Failed task ID: not found in deploy output.'; \
+			echo 'Docker Swarm update failed. Failed task ID: not found in deploy output.'; \
 		fi; \
 		exit 1; \
 	fi

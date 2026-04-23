@@ -1,8 +1,18 @@
 # Yii API template Change Log
 
-## 1.2.1 under development
+## 1.4.1 under development
 
-- no changes in this release.
+- Enh #276: Add `make open` and improve `make up` UX (@samdark)
+
+## 1.4.0 April 12, 2026
+
+- New #275: Add explicit `Caddyfile`s for dev and prod (@samdark)
+
+## 1.3.0 April 06, 2026
+
+- Chg #272: Do not write logs to file since that's not needed for both Docker and `./yii serve` (@samdark)
+- Enh #252: Add `.env` for development without Docker (@samdark)
+- Enh #271: Add "service update paused" case for swarm deployment log parsing (@samdark)
 
 ## 1.2.0 March 09, 2026
 

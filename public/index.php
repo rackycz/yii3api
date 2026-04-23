@@ -7,12 +7,12 @@ use Psr\Log\LogLevel;
 use Yiisoft\ErrorHandler\ErrorHandler;
 use Yiisoft\ErrorHandler\Renderer\JsonRenderer;
 use Yiisoft\Log\Logger;
-use Yiisoft\Log\Target\File\FileTarget;
+use Yiisoft\Log\StreamTarget;
 use Yiisoft\Yii\Runner\Http\HttpApplicationRunner;
 
 $root = dirname(__DIR__);
 
-require_once $root . '/src/autoload.php';
+require_once $root . '/src/bootstrap.php';
 
 if (Environment::appC3()) {
     $c3 = $root . '/c3.php';
@@ -46,7 +46,7 @@ $runner = new HttpApplicationRunner(
     temporaryErrorHandler: new ErrorHandler(
         new Logger(
             [
-                (new FileTarget($root . '/runtime/logs/app-container-building.log'))->setLevels([
+                (new StreamTarget())->setLevels([
                     LogLevel::EMERGENCY,
                     LogLevel::ERROR,
                     LogLevel::WARNING,
